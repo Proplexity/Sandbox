@@ -24,46 +24,48 @@ public class playerLandController : MonoBehaviour
     [SerializeField] ControllerInput _input;
     [SerializeField] CameraController _cameraController;
 
-    [SerializeField] float _playerLookInputLerpTime = 0.35f;
+    [SerializeField] float _playerLookInputLerpTime;
 
     [Header("Movement")]
-    [SerializeField] float _movementMultiplier = 30.0f;
-    [SerializeField] float _notGroundedMovementMultiplier = 1.25f;
-    [SerializeField] float _rotationSpeedMultiplier = 180.0f;
-    [SerializeField] float _pitchSpeedMultiplier = 180.0f;
-    [SerializeField] float crouchSpeedMultiplier = 0.5f;
-    [SerializeField] float _crouchSpeedMovementMultiplier = 0.5f;
-    [SerializeField] float _runMultiplier = 2.5f;
+    [SerializeField] float _movementMultiplier;
+    [SerializeField] float _notGroundedMovementMultiplier;
+    [SerializeField] float _rotationSpeedMultiplier;
+    [SerializeField] float _pitchSpeedMultiplier;
+    [SerializeField] float crouchSpeedMultiplier;
+    [SerializeField] float _crouchSpeedMovementMultiplier;
+    [SerializeField] float _runMultiplier;
 
     [Header("GroundCheck")]
     [SerializeField] bool _playerIsGrounded = true;
     // [Range()] creates a slider with the gicven parameters
-    [SerializeField][Range(0.0f, 1.8f)] float _groundCheckRadiusMultiplier = 0.9f;
-    [SerializeField][Range(-0.95f, 1.05f)] float _groundCheckDistanceTolerance = 0.05f;
-    [SerializeField] float _playerCenterToGroundDistance = 0.0f;
+    [SerializeField][Range(0.0f, 1.8f)] float _groundCheckRadiusMultiplier;
+    [SerializeField][Range(-0.95f, 1.05f)] float _groundCheckDistanceTolerance;
+    [SerializeField] float _playerCenterToGroundDistance;
     RaycastHit _groundCheckHit = new RaycastHit();
 
     [Header("Gravity")]
-    [SerializeField] float _gravityFallCurrent = -100.0f;
-    [SerializeField] float _gravityFallMin = -100.0f;
-    [SerializeField] float _gravityFallMax = -500.0f;
-    [SerializeField][Range(-5.0f, -35.0f)] float _gravityFallIncrementAmount = -20.0f;
-    [SerializeField] float _gravityFallIncrementTime = 0.05f;
-    [SerializeField] float _playerFallTimer = 0.0f;
-    [SerializeField] float _gravityGrounded = -1.0f;
-    [SerializeField] float _maxSlopeAngle = 47.5f;
+    [SerializeField] float _gravityFallCurrent;
+    [SerializeField] float _gravityFallMin;
+    [SerializeField] float _gravityFallMax;
+    [SerializeField][Range(-5.0f, -35.0f)] float _gravityFallIncrementAmount;
+    [SerializeField] float _gravityFallIncrementTime;
+    [SerializeField] float _playerFallTimer;
+    [SerializeField] float _gravityGrounded;
+    [SerializeField] float _maxSlopeAngle;
 
-    [Header("Stairs")]
-    [SerializeField][Range(0.0f, 5.0f)] float _maxStepHeight = 0.5f;
-    [SerializeField][Range(0.0f, 5.0f)] float _minStepDepth = 0.5f;
-    [SerializeField] float _stairHeightPaddingMultiplier = 1.5f;
+
+    // Remember to Fix Later
+    [Header("Stairs Settings")]
+    [SerializeField][Range(0.0f, 5.0f)] float _maxStepHeight;
+    [SerializeField][Range(0.0f, 5.0f)] float _minStepDepth;
+    [SerializeField] float _stairHeightPaddingMultiplier;
     [SerializeField] bool _isFirstStep = true;
-    [SerializeField] float _firstStepVelocityDistanceMultiplier = 0.1f;
+    [SerializeField] float _firstStepVelocityDistanceMultiplier;
     [SerializeField] bool _playerIsAscendingStairs = false;
     [SerializeField] bool _playerIsDescendingStairs = false;
-    [SerializeField] float AscendingStairsMovementeMultiplier = 0.35f;
-    [SerializeField] float DescendingStairsMovementeMultiplier = 0.7f;
-    [SerializeField] float _maximunAngleOfApproachToAscend = 45.0f;
+    [SerializeField] float AscendingStairsMovementeMultiplier;
+    [SerializeField] float DescendingStairsMovementeMultiplier;
+    [SerializeField] float _maximunAngleOfApproachToAscend;
     float _playerHalfHeightToGround = 0.0f;
     float maxAscendRayDistance = 0.0f;
     float maxDescendRayDistance = 0.0f;
@@ -72,14 +74,14 @@ public class playerLandController : MonoBehaviour
 
 
     [Header("Jumping")]
-    [SerializeField] float _initialJumpForceMultiplier = 750.0f;
-    [SerializeField] float _continualJumpForceMultiplier = 0.1f;
-    [SerializeField] float _jumpTime = 0.175f;
-    [SerializeField] float _jumpTimeCounter = 0.0f;
-    [SerializeField] float _coyoteTime = 0.15f;
-    [SerializeField] float _coyoteTimeCounter = 0.0f;
-    [SerializeField] float _jumpBufferTime = 0.2f;
-    [SerializeField] float _jumpBufferTimeCounter = 0.0f;
+    [SerializeField] float _initialJumpForceMultiplier;
+    [SerializeField] float _continualJumpForceMultiplier;
+    [SerializeField] float _jumpTime;
+    [SerializeField] float _jumpTimeCounter;
+    [SerializeField] float _coyoteTime;
+    [SerializeField] float _coyoteTimeCounter;
+    [SerializeField] float _jumpBufferTime;
+    [SerializeField] float _jumpBufferTimeCounter;
     [SerializeField] bool _playerIsJumping = false;
     [SerializeField] bool _jumpWasPressedLastFrame = false;
 
@@ -100,6 +102,7 @@ public class playerLandController : MonoBehaviour
     RaycastHit _lastGroundCheckHit = new RaycastHit();
     Vector3 _playerMoveInputAtLastKnownGroundCheckHit = Vector3.zero;
 
+    // why is this here?
     [Header("Interaction")]
 
     public Camera _camera;
@@ -205,7 +208,7 @@ public class playerLandController : MonoBehaviour
         */
 
 
-        return ((_playerIsGrounded) ? _playerMoveInput * _movementMultiplier : (_playerMoveInput * _movementMultiplier * _notGroundedMovementMultiplier));        // This is an if else statement
+        return ((_playerIsGrounded) ? _playerMoveInput * _movementMultiplier : (_playerMoveInput * _movementMultiplier * _notGroundedMovementMultiplier));       
     }
 
     private bool PlayerGroundCheck()
